@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="jp">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://unpkg.com/vue@next"></script>
+    <title>Document</title>
+</head>
+<body>
+    <style>
+        .blue {
+            color: blue
+        }
+        .red {
+            color: red
+        }
+    </style>
+    <div id="app1">
+        app1: {{ message }}
+        <p>{{ count }}回クリックしました</p>
+        <button v-on:click="increment">カウントを増やす</button><br>
+        <span v-if="seen">あいうえお</span><br>
+        <button v-on:click="off">表示off</button>
+        <button v-on:click="on">表示on</button>
+        <p v-bind:class="class1">カキクケコ</p>
+        <p :class="class1">サシスセソ</p>
+        <ul>
+            <li v-for="todo in todos">
+                {{ todo.text }}
+            </li>
+        </ul>
+        
+    </div>
+    <div id="app2">
+        <ul>
+            <template1 prop1="次へ"></template1>
+            <template1 prop1="前へ"></template1>
+            <template1 :prop1="varString"></template1>
+            <template2 
+                v-for="item in itemList"
+                :prop1="item"
+                prop2="です"
+            ></template2>
+        </ul>
+        app2: {{ message }}
+    </div>
+    <script>
+        const App1 = {
+            data() {
+                return {
+                    message:"Hello!",
+                    count: 0,
+                    seen: true,
+                    class1: "blue",
+                    todos: [
+                        { text: 'PHP'},
+                        { text: 'Ruby'},
+                        { text: 'Python'},
+                    ]
+                }
+            },
+            methods: {
+                increment: function(){
+                    this.count += 1
+                },
+                off: function(){
+                    this.seen = false
+                },
+                on: function(){
+                    this.seen = true
+                }
+            }
+        }
+        app1 = Vue.createApp(App1)
+        app1.mount('#app1')
+        const App2 = {
+            data() {
+                return {
+                    varString: "Hello!",
+                    itemList: [
+                        {id: 0, text: '0番'},
+                        {id: 1, text: '1番'},
+                        {id: 2, text: '2番'}
+                    ]
+                }
+            },
+        }
+        const app = Vue.createApp(App2)
+        app.component('template1',{
+            props: ['prop1'],
+            template: `
+                <button>{{prop1}}</button>
+                <br>
+            `
+        })
+        app.component('template2',{
+            props: ['prop1','prop2'],
+            template: `
+                <li>{{prop1.id}}は{{prop1.text}}{{prop2}}</li>
+            `
+        })
+        app.mount('#app2')
+    </script>
+</body>
+</html>
